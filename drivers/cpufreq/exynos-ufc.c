@@ -26,7 +26,7 @@
 
 #include "exynos-acme.h"
 
-#define SUSTAINABLE_FREQ 1703000
+#define SUSTAINABLE_FREQ 2314000
 
 /*********************************************************************
  *                          SYSFS INTERFACES                         *

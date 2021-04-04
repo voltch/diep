@@ -196,8 +196,6 @@ static int tee_scheduler(void *arg)
 			ret = mc_fc_nsiq();
 		}
 
-		/* Always flush log buffer after the SWd has run */
-		mc_logging_run();
 		if (ret)
 			break;
 

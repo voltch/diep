@@ -295,8 +295,7 @@ static int suspend_notifier(struct notifier_block *nb, unsigned long event,
 		mc_scheduler_suspend();
 		/* Make sure the TEE cannot run anymore */
 		mc_scheduler_stop();
-		/* Flush log buffer */
-		mc_logging_run();
+
 		break;
 	case PM_POST_HIBERNATION:
 		if (main_ctx.did_hibernate) {
@@ -327,12 +326,6 @@ static int mobicore_start(void)
 	mutex_lock(&main_ctx.start_mutex);
 	if (main_ctx.start_ret != TEE_START_NOT_TRIGGERED)
 		goto got_ret;
-
-	ret = mc_logging_start();
-	if (ret) {
-		mc_dev_err("Log start failed");
-		goto err_log;
-	}
 
 	ret = nq_start();
 	if (ret) {
@@ -483,7 +476,7 @@ err_iwp:
 err_mcp:
 	nq_stop();
 err_nq:
-	mc_logging_stop();
+
 err_log:
 	main_ctx.start_ret = ret;
 got_ret:
@@ -500,7 +493,7 @@ static void mobicore_stop(void)
 #endif
 	mc_pm_stop();
 	mc_scheduler_stop();
-	mc_logging_stop();
+
 	iwp_stop();
 	mcp_stop();
 	nq_stop();
@@ -690,11 +683,6 @@ static int mobicore_probe(struct platform_device *pdev)
 		goto err_iwp;
 	}
 
-	err = mc_logging_init();
-	if (err) {
-		mc_dev_err("Log init failed!");
-		goto err_log;
-	}
 
 	err = mc_scheduler_init();
 	if (err) {
@@ -729,7 +717,7 @@ err_start:
 err_admin:
 	mc_scheduler_exit();
 err_sched:
-	mc_logging_exit();
+
 err_log:
 	iwp_exit();
 err_iwp:
@@ -785,7 +773,7 @@ static void __exit mobicore_exit(void)
 #endif
 	device_admin_exit();
 	mc_scheduler_exit();
-	mc_logging_exit();
+
 	iwp_exit();
 	mcp_exit();
 	nq_exit();
