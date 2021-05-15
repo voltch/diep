@@ -899,7 +899,7 @@
 		gpu_default_voltage = <800000>;
 		gpu_cold_minimum_vol = <0>;
 		gpu_voltage_offset_margin = <37500>;
-		gpu_tmu_control = <0>;
+		gpu_tmu_control = <1>;
 		gpu_temp_throttling_level_num = <6>;
 		gpu_temp_throttling = <546000 455000 385000 338000 260000 260000>;
 		gpu_power_coeff = <625>;
@@ -910,14 +910,14 @@
 		gpu_dvs = <0>;
 		gpu_inter_frame_pm = <1>;
 		gpu_perf_gathering = <0>;
-		gpu_runtime_pm_delay_time = <0>;
+		gpu_runtime_pm_delay_time = <50>;
 		gpu_dvfs_polling_time = <30>;
 		gpu_pmqos_int_disable = <1>;
 		gpu_pmqos_mif_max_clock = <1794000>;
 		gpu_pmqos_mif_max_clock_base = <546000>;
 		gpu_cl_dvfs_start_base = <455000>;
-		gpu_debug_level = <4>; /*DEBUG(1) INFO(2) WARNING(3) ERROR(4)*/
-		gpu_trace_level = <1>; /*TRACE_ALL*/
+		gpu_debug_level = <3>; /*DEBUG(1) INFO(2) WARNING(3) ERROR(4)*/
+		gpu_trace_level = <8>; /*TRACE_ALL*/
 		gpu_mo_min_clock = <455000>;
 		gpu_boost_gpu_min_lock = <0>;
 		gpu_boost_egl_min_lock = <1872000>;
@@ -2594,7 +2594,7 @@
 		gov_name = "interactive";
 		use_reg = "false";
 
-		use_tmu = "false";
+		use_tmu = "true";
 		use_cl_dvfs = "false";
 		use_sw_clk = "false";
 		dfs_id = <ACPM_DVFS_MIF>;
@@ -2626,7 +2626,7 @@
 		gov_name = "interactive";
 		use_reg = "false";
 
-		use_tmu = "false";
+		use_tmu = "true";
 		use_cl_dvfs = "false";
 		use_sw_clk = "false";
 		dfs_id = <ACPM_DVFS_INT>;
@@ -2658,7 +2658,7 @@
 		gov_name = "interactive";
 		use_reg = "false";
 
-		use_tmu = "false";
+		use_tmu = "true";
 		use_cl_dvfs = "false";
 		use_sw_clk = "false";
 		dfs_id = <ACPM_DVFS_INTCAM>;
@@ -2688,7 +2688,7 @@
 		gov_name = "interactive";
 		use_reg = "false";
 
-		use_tmu = "false";
+		use_tmu = "true";
 		use_cl_dvfs = "false";
 		use_sw_clk = "false";
 		dfs_id = <ACPM_DVFS_DISP>;
@@ -2718,7 +2718,7 @@
 		gov_name = "interactive";
 		use_reg = "false";
 
-		use_tmu = "false";
+		use_tmu = "true";
 		use_cl_dvfs = "false";
 		use_sw_clk = "false";
 		dfs_id = <ACPM_DVFS_CAM>;
@@ -3636,6 +3636,11 @@
 			reg = <0x0 0x13F2E000 0x1000>;
 			reg-names = "reg";
 			abox = <&abox>;
+		};
+
+		abox_debug: abox_debug@0 {
+			compatible = "samsung,abox-debug";
+			memory-region = <&abox_rmem>;
 		};
 
 		abox_vss: abox_vss@0 {
@@ -4645,10 +4650,10 @@
 		tmu_name = "MNGS";
 		id = <0>;
 		sensors = <61>;
-		sensing_mode = "max";
-		hotplug_enable = <0>;
-		hotplug_in_threshold = <90>;
-		hotplug_out_threshold = <100>;
+		sensing_mode = "balance";
+		hotplug_enable = <1>;
+		hotplug_in_threshold = <91>;
+		hotplug_out_threshold = <96>;
 		#include "exynos8895-tmu-sensor-conf.dtsi"
 	};
 
@@ -4697,8 +4702,8 @@
 	thermal-zones {
 		mngs_thermal: mngs-thermal {
 			zone_name  = "MNGS_THERMAL";
-			polling-delay-passive = <0>;
-			polling-delay = <0>;
+			polling-delay-passive = <50>;
+			polling-delay = <1000>;
 			thermal-sensors = <&tmuctrl_0>;
 			governor = "power_allocator";
 			sustainable-power = <2000>;
@@ -4711,22 +4716,22 @@
 			trips {
 				mngs_cold: mngs-cold {
 					temperature = <20000>;
-					hysteresis = <10000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				mngs_alert0: mngs-alert0 {
-					temperature = <140000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <55000>; /* millicelsius */
+					hysteresis = <2000>; /* millicelsius */
 					type = "active";
 				};
 				mngs_alert1: mngs-alert1 {
-					temperature = <145000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <83000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "passive";
 				};
 				mngs_hot: mngs-hot {
-					temperature = <150000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <115000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "hot";
 				};
 			};
@@ -4752,45 +4757,46 @@
 			trips {
 				apo_alert0: apo-alert0 {
 					temperature = <20000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				apo_alert1: apo-alert1 {
-					temperature = <144000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <76000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				apo_alert2: apo-alert2 {
-					temperature = <145000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <81000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				apo_alert3: apo-alert3 {
-					temperature = <146000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <86000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				apo_alert4: apo-alert4 {
-					temperature = <147000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <91000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				apo_alert5: apo-alert5 {
-					temperature = <148000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <96000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				apo_alert6: apo-alert6 {
-					temperature = <149000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <101000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				apo_hot: apo-hot {
-					temperature = <150000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <115000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "hot";
 				};
 			};
+
 			cooling-maps {
 				map0 {
 				     trip = <&apo_alert0>;
@@ -4837,7 +4843,7 @@
 
 		gpu_thermal: GPU {
 			zone_name  = "GPU_THERMAL";
-			polling-delay-passive = <1000>;
+			polling-delay-passive = <100>;
 			polling-delay = <0>;
 			thermal-sensors = <&tmuctrl_2>;
 			governor = "power_allocator";
@@ -4851,22 +4857,22 @@
 			trips {
 				gpu_cold: gpu-cold {
 					temperature = <20000>;
-					hysteresis = <10000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				gpu_alert0: gpu-alert0 {
-					temperature = <140000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <78000>; /* millicelsius */
+					hysteresis = <2000>; /* millicelsius */
 					type = "active";
 				};
 				gpu_alert1: gpu-alert1 {
-					temperature = <145000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <88000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "passive";
 				};
 				gpu_hot: gpu-hot {
-					temperature = <150000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <115000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "hot";
 				};
 			};
@@ -4892,27 +4898,27 @@
 			trips {
 				isp_alert0: isp-alert0 {
 					temperature = <20000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				isp_alert1: isp-alert1 {
-					temperature = <135000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <91000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				isp_alert2: isp-alert2 {
-					temperature = <140000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <96000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				isp_alert3: isp-alert3 {
-					temperature = <145000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <101000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "active";
 				};
 				isp_hot: isp-hot {
-					temperature = <150000>; /* millicelsius */
-					hysteresis = <10000>; /* millicelsius */
+					temperature = <115000>; /* millicelsius */
+					hysteresis = <5000>; /* millicelsius */
 					type = "hot";
 				};
 			};

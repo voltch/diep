@@ -14,7 +14,7 @@ int pmucal_system_enter(int mode)
 	int ret;
 
 	if (mode != SYS_SICD)
-
+		exynos_ss_pmu(mode, __func__, ESS_FLAG_IN);
 
 	if (mode >= NUM_SYS_POWERDOWN) {
 		pr_err("%s %s: mode index(%d) is out of supported range (0~%d).\n",
@@ -39,6 +39,7 @@ int pmucal_system_enter(int mode)
 	}
 
 	if (mode != SYS_SICD)
+		exynos_ss_pmu(mode, __func__, ESS_FLAG_OUT);
 
 	return 0;
 }
@@ -56,6 +57,7 @@ int pmucal_system_exit(int mode)
 	int ret;
 
 	if (mode != SYS_SICD)
+		exynos_ss_pmu(mode, __func__, ESS_FLAG_IN);
 
 	if (mode >= NUM_SYS_POWERDOWN) {
 		pr_err("%s %s: mode index(%d) is out of supported range (0~%d).\n",
@@ -86,6 +88,7 @@ int pmucal_system_exit(int mode)
 	}
 
 	if (mode != SYS_SICD)
+		exynos_ss_pmu(mode, __func__, ESS_FLAG_OUT);
 
 	return 0;
 }
@@ -103,6 +106,7 @@ int pmucal_system_earlywakeup(int mode)
 	int ret;
 
 	if (mode != SYS_SICD)
+		exynos_ss_pmu(mode, __func__, ESS_FLAG_IN);
 
 	if (mode >= NUM_SYS_POWERDOWN) {
 		pr_err("%s %s: mode index(%d) is out of supported range (0~%d).\n",
@@ -133,6 +137,7 @@ int pmucal_system_earlywakeup(int mode)
 	}
 
 	if (mode != SYS_SICD)
+		exynos_ss_pmu(mode, __func__, ESS_FLAG_OUT);
 
 	return 0;
 }

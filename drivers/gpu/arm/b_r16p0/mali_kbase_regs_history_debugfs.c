@@ -24,7 +24,7 @@
 
 #include "mali_kbase_regs_history_debugfs.h"
 
-#if 0
+#if defined(CONFIG_DEBUG_FS) && !defined(CONFIG_MALI_NO_MALI)
 
 #include <linux/debugfs.h>
 

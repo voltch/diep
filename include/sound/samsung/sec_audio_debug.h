@@ -1,7 +1,7 @@
 #ifndef _SEC_AUDIO_DEBUG_H
 #define _SEC_AUDIO_DEBUG_H
 
-#if 0
+#ifdef CONFIG_SND_SOC_SAMSUNG_AUDIO
 void sec_audio_log(int level, const char *fmt, ...);
 int alloc_sec_audio_log(int buffer_len);
 void free_sec_audio_log(void);

@@ -14,6 +14,7 @@ mcDrvModule-y := \
 	clock.o \
 	fastcall.o \
 	iwp.o \
+	logging.o \
 	main.o \
 	mcp.o \
 	mmu.o \

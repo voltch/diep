@@ -801,11 +801,6 @@ static ssize_t devkmsg_write(struct kiocb *iocb, struct iov_iter *from)
 		}
 	}
 
-	if (unlikely(strncmp("healthd", line, 7) == 0 || strncmp("Trustonic TEE", line, 13) == 0))
-	{
-		return len;
-	}
-
 	printk_emit(facility, level, NULL, 0, "%s", line);
 	kfree(buf);
 	return ret;
@@ -1870,8 +1865,6 @@ asmlinkage int vprintk_emit(int facility, int level,
 	/* cpu currently holding logbuf_lock in this function */
 	static unsigned int logbuf_cpu = UINT_MAX;
 
-			return 0;
-	
 	if (level == LOGLEVEL_SCHED) {
 		level = LOGLEVEL_DEFAULT;
 		in_sched = true;
@@ -2042,8 +2035,6 @@ EXPORT_SYMBOL(vprintk_emit);
 
 asmlinkage int vprintk(const char *fmt, va_list args)
 {
-			return 0;
-			
 	return vprintk_emit(0, LOGLEVEL_DEFAULT, NULL, 0, fmt, args);
 }
 EXPORT_SYMBOL(vprintk);
@@ -2055,8 +2046,6 @@ asmlinkage int printk_emit(int facility, int level,
 	va_list args;
 	int r;
 
-			return 0;
-	
 	va_start(args, fmt);
 	r = vprintk_emit(facility, level, dict, dictlen, fmt, args);
 	va_end(args);
@@ -2068,8 +2057,6 @@ EXPORT_SYMBOL(printk_emit);
 int vprintk_default(const char *fmt, va_list args)
 {
 	int r;
-
-			return 0;
 
 #ifdef CONFIG_KGDB_KDB
 	if (unlikely(kdb_trap_printk)) {
@@ -2118,8 +2105,6 @@ asmlinkage __visible int printk(const char *fmt, ...)
 	va_list args;
 	int r;
 
-		return 0;
-	
 	va_start(args, fmt);
 
 	/*
@@ -2314,6 +2299,7 @@ void suspend_console(void)
 {
 	if (!console_suspend_enabled)
 		return;
+	printk("Suspending console(s) (use no_console_suspend to debug)\n");
 	console_lock();
 	console_suspended = 1;
 	up_console_sem();

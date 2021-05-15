@@ -17,6 +17,7 @@ int pmucal_local_enable(unsigned int pd_id)
 {
 	int ret;
 
+	exynos_ss_pmu(pd_id, __func__, ESS_FLAG_IN);
 
 	if (pd_id >= pmucal_pd_list_size) {
 		pr_err("%s pd index(%d) is out of supported range (0~%d).\n",
@@ -46,6 +47,7 @@ int pmucal_local_enable(unsigned int pd_id)
 		return ret;
 	}
 
+	exynos_ss_pmu(pd_id, __func__, ESS_FLAG_OUT);
 
 	return 0;
 }
@@ -62,6 +64,7 @@ int pmucal_local_disable(unsigned int pd_id)
 {
 	int ret, i;
 
+	exynos_ss_pmu(pd_id, __func__, ESS_FLAG_IN);
 
 	if (pd_id >= pmucal_pd_list_size) {
 		pr_err("%s pd index(%d) is out of supported range (0~%d).\n",
@@ -91,6 +94,7 @@ int pmucal_local_disable(unsigned int pd_id)
 		return ret;
 	}
 
+	exynos_ss_pmu(pd_id, __func__, ESS_FLAG_OUT);
 
 	return 0;
 }
@@ -108,6 +112,7 @@ int pmucal_local_is_enabled(unsigned int pd_id)
 {
 	int i;
 
+	exynos_ss_pmu(pd_id, __func__, ESS_FLAG_IN);
 
 	if (pd_id >= pmucal_pd_list_size) {
 		pr_err("%s pd index(%d) is out of supported range (0~%d).\n",
@@ -130,6 +135,7 @@ int pmucal_local_is_enabled(unsigned int pd_id)
 			break;
 	}
 
+	exynos_ss_pmu(pd_id, __func__, ESS_FLAG_OUT);
 
 	if (i == pmucal_pd_list[pd_id].num_status)
 		return 1;

@@ -25,7 +25,7 @@
 
 #include <mali_kbase_mem_pool_debugfs.h>
 
-#if 0
+#ifdef CONFIG_DEBUG_FS
 
 static int kbase_mem_pool_debugfs_size_get(void *data, u64 *val)
 {

@@ -289,7 +289,6 @@ void kbase_release_device(struct kbase_device *kbdev)
 }
 EXPORT_SYMBOL(kbase_release_device);
 
-#if 0
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 6, 0) && \
 		!(LINUX_VERSION_CODE >= KERNEL_VERSION(4, 4, 28) && \
 		LINUX_VERSION_CODE < KERNEL_VERSION(4, 5, 0))
@@ -397,14 +396,13 @@ static const struct file_operations kbase_force_same_va_fops = {
 	.write = write_ctx_force_same_va,
 	.read = read_ctx_force_same_va,
 };
-#endif
 
 static int kbase_open(struct inode *inode, struct file *filp)
 {
 	struct kbase_device *kbdev = NULL;
 	struct kbase_context *kctx;
 	int ret = 0;
-#if 0
+#ifdef CONFIG_DEBUG_FS
 	char kctx_name[64];
 #endif
 
@@ -431,7 +429,7 @@ static int kbase_open(struct inode *inode, struct file *filp)
 	if (kbdev->infinite_cache_active_default)
 		kbase_ctx_flag_set(kctx, KCTX_INFINITE_CACHE);
 
-#if 0
+#ifdef CONFIG_DEBUG_FS
 	snprintf(kctx_name, 64, "%d_%d", kctx->tgid, kctx->id);
 
 	kctx->kctx_dentry = debugfs_create_dir(kctx_name,
@@ -495,7 +493,7 @@ static int kbase_release(struct inode *inode, struct file *filp)
 
 	KBASE_TLSTREAM_TL_DEL_CTX(kctx);
 
-#if 0
+#ifdef CONFIG_DEBUG_FS
 	kbasep_mem_profile_debugfs_remove(kctx);
 #endif
 
@@ -2677,7 +2675,7 @@ static DEVICE_ATTR(reset_timeout, S_IRUGO | S_IWUSR, show_reset_timeout,
 		set_reset_timeout);
 
 
-#if 0
+
 static ssize_t show_mem_pool_size(struct device *dev,
 		struct device_attribute *attr, char * const buf)
 {
@@ -2868,7 +2866,6 @@ static ssize_t set_lp_mem_pool_max_size(struct device *dev,
 
 static DEVICE_ATTR(lp_mem_pool_max_size, S_IRUGO | S_IWUSR, show_lp_mem_pool_max_size,
 		set_lp_mem_pool_max_size);
-#endif
 
 /**
  * show_js_ctx_scheduling_mode - Show callback for js_ctx_scheduling_mode sysfs
@@ -2952,7 +2949,7 @@ static ssize_t set_js_ctx_scheduling_mode(struct device *dev,
 static DEVICE_ATTR(js_ctx_scheduling_mode, S_IRUGO | S_IWUSR,
 		show_js_ctx_scheduling_mode,
 		set_js_ctx_scheduling_mode);
-#if 0
+#ifdef CONFIG_DEBUG_FS
 
 /* Number of entries in serialize_jobs_settings[] */
 #define NR_SERIALIZE_JOBS_SETTINGS 5
@@ -3396,7 +3393,7 @@ static void power_control_term(struct kbase_device *kbdev)
 }
 
 #ifdef MALI_KBASE_BUILD
-#if 0
+#ifdef CONFIG_DEBUG_FS
 
 #include <mali_kbase_hwaccess_jm.h>
 
@@ -3570,7 +3567,7 @@ static int kbase_device_debugfs_init(struct kbase_device *kbdev)
 #endif /* CONFIG_DEVFREQ_THERMAL */
 #endif /* CONFIG_MALI_DEVFREQ */
 
-#if 0
+#ifdef CONFIG_DEBUG_FS
 	debugfs_create_file("serialize_jobs", S_IRUGO | S_IWUSR,
 			kbdev->mali_debugfs_directory, kbdev,
 			&kbasep_serialize_jobs_debugfs_fops);
@@ -3686,12 +3683,10 @@ static struct attribute *kbase_attrs[] = {
 	&dev_attr_js_scheduling_period.attr,
 	&dev_attr_power_policy.attr,
 	&dev_attr_core_mask.attr,
-#if 0
 	&dev_attr_mem_pool_size.attr,
 	&dev_attr_mem_pool_max_size.attr,
 	&dev_attr_lp_mem_pool_size.attr,
 	&dev_attr_lp_mem_pool_max_size.attr,
-#endif
 	&dev_attr_js_ctx_scheduling_mode.attr,
 	NULL
 };

@@ -22,7 +22,7 @@
 
 #include <mali_kbase.h>
 
-#if 0
+#ifdef CONFIG_DEBUG_FS
 
 /** Show callback for the @c mem_profile debugfs file.
  *

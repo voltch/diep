@@ -20,7 +20,7 @@
  *
  */
 
-#if 0
+#ifdef CONFIG_DEBUG_FS
 
 #include <linux/seq_file.h>
 #include <mali_kbase.h>

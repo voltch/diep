@@ -294,7 +294,7 @@ static inline void exynos_ufs_ctrl_phy_pwr(struct exynos_ufs *ufs, bool en)
 	writel(!!en, ufs->phy.reg_pmu);
 }
 
-#if 0
+#ifndef __EXYNOS_UFS_VS_DEBUG__
 static void exynos_ufs_dump_std_sfr(struct ufs_hba *hba)
 {
 	struct exynos_ufs *ufs = to_exynos_ufs(hba);
@@ -324,9 +324,9 @@ static void exynos_ufs_dump_std_sfr(struct ufs_hba *hba)
  */
 static void exynos_ufs_dump_debug_info(struct ufs_hba *hba)
 {
-#if 0
+#ifdef __EXYNOS_UFS_VS_DEBUG__
 	exynos_ufs_get_uic_info(hba);
-
+#else
 	exynos_ufs_dump_std_sfr(hba);
 #endif
 }
@@ -891,6 +891,7 @@ static bool exynos_ufs_wait_pll_lock(struct exynos_ufs *ufs, u32 addr, u32 mask)
 
 	dev_err(ufs->dev, "timeout pll lock\n");
 
+	exynos_ufs_dump_uic_info(ufs->hba);
 
 	return false;
 
@@ -911,6 +912,7 @@ static bool exynos_ufs_wait_cdr_lock(struct exynos_ufs *ufs, u32 addr,
 
 	dev_err(ufs->dev, "timeout cdr lock\n");
 
+	exynos_ufs_dump_uic_info(ufs->hba);
 
 	return false;
 
@@ -1559,6 +1561,11 @@ static int exynos_ufs_init(struct ufs_hba *hba)
 	/* SMU */
 	exynos_ufs_config_smu(ufs);
 
+	/* Enable log */
+	ret =  exynos_ufs_init_dbg(hba);
+
+	if (ret)
+		return ret;
 
 	ufs->misc_flags = EXYNOS_UFS_MISC_TOGGLE_LOG;
 
@@ -1581,6 +1588,7 @@ static void exynos_ufs_host_reset(struct ufs_hba *hba)
 
 	dev_err(ufs->dev, "timeout host sw-reset\n");
 
+	exynos_ufs_dump_uic_info(hba);
 
 	goto out;
 
